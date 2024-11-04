@@ -1,4 +1,5 @@
 import 'package:flash_cards_1/features/card_items/models/card_item.dart';
+import 'package:flash_cards_1/features/common/components/buttons/simple_button.dart';
 import 'package:flash_cards_1/features/common/services/cuid.service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -97,48 +98,19 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
             const SizedBox(height: 32),
             Row(
               children: [
-                ElevatedButton.icon(
+                SimpleButton(
                   onPressed: _saveCard,
-                  label: Text(
-                    widget.cardItem == null ? 'Add' : 'Save Edit',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  icon: const Icon(
-                    Icons.edit,
-                    size: 16,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[600],
-                    iconColor: Colors.white,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.all(20),
-                    elevation: 4,
-                  ),
+                  label: widget.cardItem == null ? 'Add' : 'Save Edit',
+                  icon: Icons.edit,
                 ),
                 const SizedBox(
                   width: 16,
                 ),
-                ElevatedButton.icon(
+                SimpleButton(
                   onPressed: _cancel,
-                  label: const Text(
-                    'Cancel',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  icon: const Icon(
-                    Icons.cancel_outlined,
-                    size: 16,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    iconColor: Colors.grey[700],
-                    foregroundColor: Colors.grey[700],
-                    padding: const EdgeInsets.all(20),
-                    elevation: 4,
-                  ),
+                  label: 'Cancel',
+                  icon: Icons.cancel_outlined,
+                  isPrimary: false,
                 ),
               ],
             ),
