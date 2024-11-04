@@ -1,5 +1,6 @@
 import 'package:flash_cards_1/features/card_categories/models/card_category.dart';
 import 'package:flash_cards_1/features/card_items/models/card_item.dart';
+import 'package:flash_cards_1/features/common/components/buttons/simple_button.dart';
 import 'package:flash_cards_1/features/common/services/cuid.service.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -139,55 +140,18 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
               ),
             if (_filePath != null) const SizedBox(height: 32),
             _filePath == null
-                ? ElevatedButton.icon(
+                ? SimpleButton(
                     onPressed: _pickFileAndParse,
-                    label: const Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.chevron_right,
-                      size: 16,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[600],
-                      iconColor: Colors.white,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.all(20),
-                      elevation: 4,
-                    ),
+                    label: 'Continue',
+                    icon: Icons.chevron_right,
+                    buttonType: SimpleButtonType.success,
                   )
-                : ElevatedButton.icon(
+                : SimpleButton(
                     onPressed: _createCardCategory,
-                    label: const Text(
-                      'Create Category',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.check,
-                      size: 16,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[600],
-                      iconColor: Colors.white,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.all(20),
-                      elevation: 4,
-                    ),
-                  ),
-            // ElevatedButton(
-            //   onPressed: _pickFileAndParse,
-            //   child: const Text('Continue'),
-            // ),
-            // const Spacer(),
-            // ElevatedButton(
-            //   onPressed: _createCardCategory,
-            //   child: const Text('Create Category'),
-            // ),
+                    label: 'Create Category',
+                    icon: Icons.check,
+                    buttonType: SimpleButtonType.success,
+                  )
           ],
         ),
       ),
