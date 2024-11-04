@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 
+enum SimpleButtonType { success, danger, regular }
+
 class SimpleButton extends StatelessWidget {
   final void Function() onPressed;
   final String label;
   final IconData icon;
-  final bool isPrimary;
+  final SimpleButtonType buttonType;
 
   const SimpleButton({
     super.key,
     required this.onPressed,
     required this.label,
     required this.icon,
-    this.isPrimary = true,
+    this.buttonType = SimpleButtonType.regular,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isPrimary ? Colors.green[600] : Colors.white;
-    final fgColor = isPrimary ? Colors.white : Colors.grey[700];
+    Color bgColor = Colors.white;
+    Color fgColor = Colors.grey[700]!;
+
+    if (buttonType == SimpleButtonType.success) {
+      bgColor = Colors.green[600]!;
+      fgColor = Colors.white;
+    } else if (buttonType == SimpleButtonType.danger) {
+      bgColor = Colors.red[700]!;
+      fgColor = Colors.white;
+    }
 
     return ElevatedButton.icon(
       onPressed: onPressed,

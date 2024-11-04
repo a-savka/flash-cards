@@ -102,6 +102,7 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
                   onPressed: _saveCard,
                   label: widget.cardItem == null ? 'Add' : 'Save Edit',
                   icon: Icons.edit,
+                  buttonType: SimpleButtonType.success,
                 ),
                 const SizedBox(
                   width: 16,
@@ -110,7 +111,7 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
                   onPressed: _cancel,
                   label: 'Cancel',
                   icon: Icons.cancel_outlined,
-                  isPrimary: false,
+                  buttonType: SimpleButtonType.regular,
                 ),
               ],
             ),

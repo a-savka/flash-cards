@@ -3,6 +3,7 @@ import 'package:flash_cards_1/features/card_categories/models/card_category.dart
 import 'package:flash_cards_1/features/card_items/components/flash_card.dart';
 import 'package:flash_cards_1/features/card_items/models/card_item.dart';
 import 'package:flash_cards_1/features/card_items/pages/add_card_item_page.dart';
+import 'package:flash_cards_1/features/common/components/generic/bottom_sheet_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -82,38 +83,10 @@ class CategoryFlashCardsState extends ConsumerState<CategoryFlashCards> {
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Are you sure you want to delete this card?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(true); // Confirm deletion
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: const Text('Delete'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false); // Cancel deletion
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        return const BottomSheetConfirmation(
+          message: 'Are you sure you want to delete this card?',
+          yesLabel: 'Delete',
+          noLabel: 'Cancel',
         );
       },
     );

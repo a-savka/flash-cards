@@ -78,6 +78,7 @@ class EditCategoryNamePageState extends ConsumerState<EditCategoryNamePage> {
                   onPressed: _saveCategory,
                   label: 'Save',
                   icon: Icons.edit,
+                  buttonType: SimpleButtonType.success,
                 ),
                 const SizedBox(
                   width: 16,
@@ -86,7 +87,7 @@ class EditCategoryNamePageState extends ConsumerState<EditCategoryNamePage> {
                   onPressed: _cancel,
                   label: 'Cancel',
                   icon: Icons.cancel_outlined,
-                  isPrimary: false,
+                  buttonType: SimpleButtonType.regular,
                 ),
               ],
             ),
