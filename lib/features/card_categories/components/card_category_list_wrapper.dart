@@ -1,6 +1,5 @@
 import 'package:flash_cards_1/features/card_categories/components/card_category_list.dart';
 import 'package:flash_cards_1/features/card_categories/models/card_category.dart';
-import 'package:flash_cards_1/features/card_categories/pages/category_cards_page.dart';
 import 'package:flash_cards_1/main.data.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

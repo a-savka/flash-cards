@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flash_cards_1/features/card_categories/models/card_category.dart';
 import 'package:flash_cards_1/features/card_categories/pages/category_cards_page.dart';
 import 'package:flash_cards_1/features/card_categories/pages/edit_category_name_page.dart';
+import 'package:flash_cards_1/features/common/services/filesystem.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
-class CardCategoryList extends StatelessWidget {
+class CardCategoryList extends StatefulHookConsumerWidget {
   final List<CardCategory> categories;
   final void Function(CardCategory category) onDelete;
 
@@ -15,7 +21,12 @@ class CardCategoryList extends StatelessWidget {
     required this.onDelete,
   });
 
-  void _onDelete(BuildContext context, CardCategory category) async {
+  @override
+  CardCategoryListState createState() => CardCategoryListState();
+}
+
+class CardCategoryListState extends ConsumerState<CardCategoryList> {
+  void _onDelete(CardCategory category) async {
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -56,11 +67,11 @@ class CardCategoryList extends StatelessWidget {
     );
 
     if (confirmed == true) {
-      onDelete(category);
+      widget.onDelete(category);
     }
   }
 
-  void _onEdit(BuildContext context, CardCategory category) {
+  void _onEdit(CardCategory category) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -75,7 +86,49 @@ class CardCategoryList extends StatelessWidget {
     );
   }
 
-  void _onExport(CardCategory category) {}
+  void _onExport(
+    CardCategory category,
+  ) async {
+    final FileSystemService fileSystem = ref.read(fileSystemServiceProvider);
+
+    String? path = await fileSystem.pickDirectoryPath();
+    bool fileSaved = false;
+
+    if (path != null && mounted) {
+      String? fileName =
+          await fileSystem.requestFileName(context, category.name);
+      if (fileName != null) {
+        path = '$path/$fileName';
+        final fileExists = await File(path).exists();
+        if (context.mounted) {
+          final operationConfirmed =
+              await fileSystem.confirmFileOverwrite(fileExists, context);
+          if (operationConfirmed) {
+            final lines = category.items
+                .map((card) => '${card.question}|${card.answer}')
+                .toList();
+
+            final exportContent = lines.join('\n');
+
+            await fileSystem.writeTextFile(path, exportContent);
+            fileSaved = true;
+          }
+        }
+      }
+    }
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            fileSaved
+                ? 'File was successfully saved'
+                : 'Failed to save the file',
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +137,7 @@ class CardCategoryList extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final category = categories[index];
+              final category = widget.categories[index];
 
               return Slidable(
                 key: ValueKey(category.id),
@@ -92,7 +145,7 @@ class CardCategoryList extends StatelessWidget {
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) => _onEdit(context, category),
+                      onPressed: (context) => _onEdit(category),
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.blue,
                       icon: Icons.edit,
@@ -104,7 +157,7 @@ class CardCategoryList extends StatelessWidget {
                       icon: Icons.file_download,
                     ),
                     SlidableAction(
-                      onPressed: (context) => _onDelete(context, category),
+                      onPressed: (context) => _onDelete(category),
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.red,
                       icon: Icons.delete,
@@ -134,7 +187,7 @@ class CardCategoryList extends StatelessWidget {
                 ),
               );
             },
-            childCount: categories.length,
+            childCount: widget.categories.length,
           ),
         ),
       ],
