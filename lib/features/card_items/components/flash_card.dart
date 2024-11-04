@@ -24,7 +24,7 @@ class FlashCardState extends ConsumerState<FlashCard>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
