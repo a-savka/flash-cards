@@ -62,11 +62,15 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
     Navigator.pop(context); // Close dialog/screen if needed
   }
 
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add new card'),
+        title: Text(widget.cardItem == null ? 'Add new card' : 'Edit card'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,6 +78,7 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 24),
             TextField(
               controller: _questionController,
               decoration: const InputDecoration(
@@ -81,7 +86,7 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             TextField(
               controller: _answerController,
               decoration: const InputDecoration(
@@ -89,12 +94,53 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 24),
-            Center(
-              child: ElevatedButton(
-                onPressed: _saveCard,
-                child: Text(widget.cardItem == null ? 'Add' : 'Edit'),
-              ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  onPressed: _saveCard,
+                  label: Text(
+                    widget.cardItem == null ? 'Add' : 'Save Edit',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 16,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[600],
+                    iconColor: Colors.white,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.all(20),
+                    elevation: 4,
+                  ),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                ElevatedButton.icon(
+                  onPressed: _cancel,
+                  label: const Text(
+                    'Cancel',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.cancel_outlined,
+                    size: 16,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    iconColor: Colors.grey[700],
+                    foregroundColor: Colors.grey[700],
+                    padding: const EdgeInsets.all(20),
+                    elevation: 4,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

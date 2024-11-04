@@ -51,7 +51,7 @@ class CardActionsState extends State<CardActions> {
           // ],
           color: Theme.of(context).colorScheme.primary,
           // color: Colors.black87,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
@@ -65,7 +65,7 @@ class CardActionsState extends State<CardActions> {
                       onPressed: widget.onAdd,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(24),
                         elevation: 4,
                         shape:
                             const CircleBorder(), // Makes the button circular
@@ -76,7 +76,7 @@ class CardActionsState extends State<CardActions> {
                       onPressed: widget.onEdit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(24),
                         elevation: 4,
                         shape: const CircleBorder(),
                       ),
@@ -86,7 +86,7 @@ class CardActionsState extends State<CardActions> {
                       onPressed: widget.onDelete,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red[600],
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(24),
                         elevation: 4,
                         shape: const CircleBorder(),
                       ),
