@@ -29,7 +29,9 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
     if (result != null && result.files.single.path != null) {
-      _filePath = result.files.single.path;
+      setState(() {
+        _filePath = result.files.single.path;
+      });
       await _parseFile();
     }
   }
@@ -118,6 +120,7 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 32),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
@@ -125,11 +128,7 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _pickFileAndParse,
-              child: const Text('Continue'),
-            ),
+            const SizedBox(height: 32),
             if (_filePath != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -138,11 +137,57 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
                   style: const TextStyle(fontSize: 16, color: Colors.green),
                 ),
               ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: _createCardCategory,
-              child: const Text('Create Category'),
-            ),
+            if (_filePath != null) const SizedBox(height: 32),
+            _filePath == null
+                ? ElevatedButton.icon(
+                    onPressed: _pickFileAndParse,
+                    label: const Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.chevron_right,
+                      size: 16,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[600],
+                      iconColor: Colors.white,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.all(20),
+                      elevation: 4,
+                    ),
+                  )
+                : ElevatedButton.icon(
+                    onPressed: _createCardCategory,
+                    label: const Text(
+                      'Create Category',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.check,
+                      size: 16,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[600],
+                      iconColor: Colors.white,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.all(20),
+                      elevation: 4,
+                    ),
+                  ),
+            // ElevatedButton(
+            //   onPressed: _pickFileAndParse,
+            //   child: const Text('Continue'),
+            // ),
+            // const Spacer(),
+            // ElevatedButton(
+            //   onPressed: _createCardCategory,
+            //   child: const Text('Create Category'),
+            // ),
           ],
         ),
       ),
