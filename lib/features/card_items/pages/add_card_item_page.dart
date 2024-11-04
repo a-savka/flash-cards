@@ -66,7 +66,6 @@ class AddCardItemPageState extends ConsumerState<AddCardItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Add new card'),
       ),
       body: Padding(

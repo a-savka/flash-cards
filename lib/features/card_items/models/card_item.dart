@@ -8,6 +8,7 @@ part 'card_item.g.dart';
 @JsonSerializable() // This annotation is for JSON serialization
 @DataRepository([]) // This annotation is for flutter_data
 class CardItem extends DataModel<CardItem> {
+  @override
   @HiveField(0)
   final String id;
 

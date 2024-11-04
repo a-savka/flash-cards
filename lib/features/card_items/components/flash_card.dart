@@ -1,8 +1,11 @@
+import 'package:flash_cards_1/features/card_categories/providers/reverse_mode.provider.dart';
 import 'package:flash_cards_1/features/card_items/models/card_item.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class FlashCard extends StatefulWidget {
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class FlashCard extends StatefulHookConsumerWidget {
   final CardItem cardItem;
 
   const FlashCard({super.key, required this.cardItem});
@@ -11,7 +14,7 @@ class FlashCard extends StatefulWidget {
   FlashCardState createState() => FlashCardState();
 }
 
-class FlashCardState extends State<FlashCard>
+class FlashCardState extends ConsumerState<FlashCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -48,6 +51,7 @@ class FlashCardState extends State<FlashCard>
 
   @override
   Widget build(BuildContext context) {
+    final reverseMode = ref.watch(reverseModeProvider);
     return GestureDetector(
       onTap: _flipCard,
       child: Center(
@@ -63,11 +67,11 @@ class FlashCardState extends State<FlashCard>
                 ..setEntry(3, 2, 0.001)
                 ..rotateY(angle),
               child: isFront
-                  ? _buildFront()
+                  ? _buildFront(reverseMode)
                   : Transform(
                       alignment: Alignment.center,
                       transform: Matrix4.identity()..rotateY(pi),
-                      child: _buildBack(),
+                      child: _buildBack(reverseMode),
                     ),
             );
           },
@@ -76,17 +80,17 @@ class FlashCardState extends State<FlashCard>
     );
   }
 
-  Widget _buildFront() {
+  Widget _buildFront(bool reverseMode) {
     return _cardTemplate(
       color: Colors.blue[300],
-      text: widget.cardItem.question,
+      text: reverseMode ? widget.cardItem.answer : widget.cardItem.question,
     );
   }
 
-  Widget _buildBack() {
+  Widget _buildBack(bool reverseMode) {
     return _cardTemplate(
       color: Colors.blue[900],
-      text: widget.cardItem.answer,
+      text: reverseMode ? widget.cardItem.question : widget.cardItem.answer,
     );
   }
 

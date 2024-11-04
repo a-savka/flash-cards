@@ -1,5 +1,3 @@
-// import 'package:flash_cards_1/features/card_categories/mocks/food_category_mock.dart';
-// import 'package:flash_cards_1/features/card_categories/mocks/weather_category_mock.dart';
 import 'dart:convert';
 
 import 'package:flash_cards_1/features/card_categories/models/card_category.dart';
@@ -8,10 +6,11 @@ import 'package:flash_cards_1/features/card_items/models/card_item.dart';
 import 'package:flash_cards_1/initial_components.dart';
 import 'package:flash_cards_1/main.data.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_data/flutter_data.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:json_theme_plus/json_theme_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,24 +18,28 @@ void main() async {
   Hive.registerAdapter(CardItemAdapter());
   Hive.registerAdapter(CardCategoryAdapter());
 
-  // final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
-  // final themeJson = jsonDecode(themeStr);
-  // final theme = ThemeDeco.decodeThemeData(themeJson)!;
+  final themeStr = await rootBundle.loadString('assets/theme/theme.json');
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
 
   runApp(ProviderScope(
     overrides: [configureRepositoryLocalStorage()],
-    child: const MyAppShell(),
+    child: MyAppShell(theme: theme),
   ));
 }
 
 class MyAppShell extends HookConsumerWidget {
-  const MyAppShell({super.key});
+  final ThemeData theme;
+  const MyAppShell({
+    super.key,
+    required this.theme,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(repositoryInitializerProvider).when(
           data: (_) {
-            return const MyApp();
+            return MyApp(theme: theme);
           },
           error: (e, __) {
             return const AppLoadingError();
@@ -47,31 +50,38 @@ class MyAppShell extends HookConsumerWidget {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeData theme;
 
-  // This widget is the root of your application.
+  const MyApp({
+    super.key,
+    required this.theme,
+  });
+
   @override
   Widget build(BuildContext context) {
-    // final CardCategory weatherCategory = getWeatherCategoryMock();
-    // final CardCategory foodCategory = getFoodCategoryMock();
-
-    // weatherCategory.saveLocal();
-    // foodCategory.saveLocal();
-
     return MaterialApp(
       title: 'Flash Cards',
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        // colorScheme: ColorScheme(primary: Colors.blue),
+      theme: theme.copyWith(
         appBarTheme: AppBarTheme(
-          color: Colors.blue[700],
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          color: theme.primaryColor,
+          actionsIconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
+          titleTextStyle: const TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
+      // theme: ThemeData(
+      //   primaryColor: Colors.blue,
+      //   // colorScheme: ColorScheme(primary: Colors.blue),
+      //   appBarTheme: AppBarTheme(
+      //     color: Colors.blue[700],
+      //     titleTextStyle: TextStyle(
+      //       color: Colors.white,
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 16,
+      //     ),
+      //   ),
+      // ),
       home: const CardCategoryListPage(),
     );
   }

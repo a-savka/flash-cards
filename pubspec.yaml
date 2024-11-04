@@ -43,7 +43,7 @@ dependencies:
   flutter_data: ^1.6.0
   path_provider: ^2.1.4
   file_picker: ^8.0.5
-  json_theme_plus: ^6.0.0
+  json_theme_plus: ^6.6.1
 
 dev_dependencies:
   flutter_test:
