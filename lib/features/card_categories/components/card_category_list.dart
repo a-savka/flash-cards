@@ -1,6 +1,6 @@
 import 'package:flash_cards_1/features/card_categories/models/card_category.dart';
 import 'package:flash_cards_1/features/card_categories/pages/category_cards_page.dart';
-import 'package:flash_cards_1/features/card_items/models/card_item.dart';
+import 'package:flash_cards_1/features/card_categories/pages/edit_category_name_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -60,7 +60,20 @@ class CardCategoryList extends StatelessWidget {
     }
   }
 
-  void _onEdit(CardCategory category) {}
+  void _onEdit(BuildContext context, CardCategory category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCategoryNamePage(
+          category: category,
+          onSave: (String newName) {
+            final updatedCategory = category.copyWith(name: newName);
+            updatedCategory.saveLocal();
+          },
+        ),
+      ),
+    );
+  }
 
   void _onExport(CardCategory category) {}
 
@@ -79,7 +92,7 @@ class CardCategoryList extends StatelessWidget {
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) => _onEdit(category),
+                      onPressed: (context) => _onEdit(context, category),
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.blue,
                       icon: Icons.edit,
