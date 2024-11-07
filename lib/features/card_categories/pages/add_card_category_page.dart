@@ -26,7 +26,6 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
   final List<CardItem> _cardItems = [];
 
   Future<void> _pickFileAndParse() async {
-    // Open file picker dialog to select a text file
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
     if (result != null && result.files.single.path != null) {
@@ -43,7 +42,6 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
     final file = File(_filePath!);
     final lines = await file.readAsLines();
 
-    // Clear any existing items before parsing
     _cardItems.clear();
 
     for (var line in lines) {
@@ -60,7 +58,6 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
       }
     }
 
-    // Notify user if no valid items were found
     if (_cardItems.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -82,18 +79,6 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
       return;
     }
 
-    if (_cardItems.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'No card items have been added. Please select a valid file.')),
-        );
-      }
-      return;
-    }
-
-    // Create the CardCategory instance and pass it back via callback
     final cardCategory = CardCategory(
       id: ref.read(cuidServiceProvider).newCuid(),
       name: categoryName,
@@ -139,19 +124,19 @@ class AddCardCategoryPageState extends ConsumerState<AddCardCategoryPage> {
                 ),
               ),
             if (_filePath != null) const SizedBox(height: 32),
-            _filePath == null
-                ? SimpleButton(
-                    onPressed: _pickFileAndParse,
-                    label: 'Continue',
-                    icon: Icons.chevron_right,
-                    buttonType: SimpleButtonType.success,
-                  )
-                : SimpleButton(
-                    onPressed: _createCardCategory,
-                    label: 'Create Category',
-                    icon: Icons.check,
-                    buttonType: SimpleButtonType.success,
-                  )
+            SimpleButton(
+              onPressed: _pickFileAndParse,
+              label: 'Import cards',
+              icon: Icons.import_export,
+              buttonType: SimpleButtonType.regular,
+            ),
+            const Spacer(),
+            SimpleButton(
+              onPressed: _createCardCategory,
+              label: 'Create Category',
+              icon: Icons.check,
+              buttonType: SimpleButtonType.success,
+            )
           ],
         ),
       ),
